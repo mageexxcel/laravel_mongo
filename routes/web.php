@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/test_mongo', 'MailController@testMongo');
+
+Route::post('/send_email', 'MailController@sendMail');
+
+Route::get('/cache', 'MailController@index');
