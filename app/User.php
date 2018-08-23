@@ -49,7 +49,7 @@ class User extends Eloquent
         $user->save();
 
         $confirmMail = new MailController();
-        $confirmMail->sendHtmlMail();
+        $confirmMail->sendMail();
         
         return $user;
     }

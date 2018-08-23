@@ -19,7 +19,7 @@ Route::post('/test_mongo', 'MailController@testMongo');
 
 Route::post('/send_email', 'MailController@sendMail');
 
-Route::get('/cache', 'MailController@index');
+Route::get('/cache', 'MailController@cache');
 
 Route::post('/sendHtmlMail', 'MailController@sendHtmlMail');
 
