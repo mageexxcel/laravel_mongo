@@ -2,10 +2,13 @@
 
 namespace App;
 
+use Validator; 
+use App\Http\Controllers\MailController;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
-class User extends Authenticatable
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+ 
+class User extends Eloquent
 {
     use Notifiable;
 
@@ -24,6 +27,30 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'created_at', 'updated_at',
     ];
+
+    public function createAccount($data)
+    {
+        $validator = Validator::make($data, [
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);            
+        }  
+
+        $user = new User();
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->password = bcrypt($data['password']);
+        $user->save();
+
+        $confirmMail = new MailController();
+        $confirmMail->sendMail();
+        
+        return $user;
+    }
 }
